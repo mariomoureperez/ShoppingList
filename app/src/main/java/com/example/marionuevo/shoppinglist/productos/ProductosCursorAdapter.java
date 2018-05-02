@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.CursorAdapter;
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import com.example.marionuevo.shoppinglist.R;
+import com.example.marionuevo.shoppinglist.data.Constants;
 import com.example.marionuevo.shoppinglist.data.ProductosContract;
 
 import static com.example.marionuevo.shoppinglist.R.mipmap.ic_launcher;
@@ -30,6 +32,8 @@ public class ProductosCursorAdapter extends CursorAdapter {
     public ProductosCursorAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
+
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -51,9 +55,10 @@ public class ProductosCursorAdapter extends CursorAdapter {
         // Setup.
         nameText.setText(name);
         descriptionText.setText(description);
+
         Glide
                 .with(context)
-                .load(Uri.parse("file:///android_asset/" + photoUri))
+                .load(Uri.parse("file:///"+ Constants.URI_PHOTOS+photoUri))
                 .asBitmap()
                 .error(ic_launcher)
                 .centerCrop()
@@ -66,5 +71,6 @@ public class ProductosCursorAdapter extends CursorAdapter {
                         photoProducto.setImageDrawable(drawable);
                     }
                 });
+
     }
 }

@@ -24,11 +24,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.marionuevo.shoppinglist.BuildConfig;
 import com.example.marionuevo.shoppinglist.R;
+import com.example.marionuevo.shoppinglist.data.Constants;
 import com.example.marionuevo.shoppinglist.data.Producto;
 import com.example.marionuevo.shoppinglist.data.ProductosDBHelper;
 import com.example.marionuevo.shoppinglist.productos.ProductosCursorAdapter;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 
 public class AddEditProductoFragment extends Fragment {
     private static final String ARG_PRODUCTO_ID = "arg_producto_id";
@@ -46,11 +48,11 @@ public class AddEditProductoFragment extends Fragment {
     private ImageView mPhoto;
     private TextInputLayout mNameLabel;
     private TextInputLayout mDescriptionLabel;
+    private String namePhoto;
 
 
 
     private static final int REQUEST_CODE = 100;
-    final String dirPhotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/shopping/";
 
 
     public AddEditProductoFragment() {
@@ -90,6 +92,8 @@ public class AddEditProductoFragment extends Fragment {
 
         mDescriptionLabel =  root.findViewById(R.id.til_description);
 
+        namedPhoto();
+
         // Eventos
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +104,8 @@ public class AddEditProductoFragment extends Fragment {
         mCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                photo("hhkh");
+                photo(namePhoto);
+
             }
         });
 
@@ -112,6 +117,11 @@ public class AddEditProductoFragment extends Fragment {
         }
 
         return root;
+    }
+
+    private void namedPhoto(){
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+        namePhoto=timeStamp+".jpg";
     }
 
     private void loadProducto() {
@@ -154,7 +164,7 @@ public class AddEditProductoFragment extends Fragment {
             return;
         }
 
-        Producto producto = new Producto(name, description, "hhhh.jpg");
+        Producto producto = new Producto(name, description,namePhoto);
 
         new AddEditProductoTask().execute(producto);
 
@@ -163,10 +173,15 @@ public class AddEditProductoFragment extends Fragment {
     private void showProducto(Producto producto) {
         mPhoto = getActivity().findViewById(R.id.iv_photo);
         mNameField.setText(producto.getName());
-        Glide.with(this)
-                .load(Uri.parse(dirPhotos + producto.getPhotoUri()))
-                .centerCrop()
-                .into(mPhoto);
+        try{
+            Glide.with(this)
+                    .load(Uri.parse("file:///"+ Constants.URI_PHOTOS + producto.getPhotoUri()))
+                    .centerCrop()
+                    .into(mPhoto);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         mDescriptionField.setText(producto.getDescription());
     }
 
@@ -218,11 +233,11 @@ public class AddEditProductoFragment extends Fragment {
     public void photo(String name){
 
 
-        File newdir = new File(dirPhotos);
+        File newdir = new File(Constants.URI_PHOTOS);
         if (!newdir.exists()) {
             newdir.mkdir();
         }
-        String file = dirPhotos +name+".jpg";
+        String file = Constants.URI_PHOTOS+name;
         File newFile = new File(file);
 
         Uri uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID+".com.example.marionuevo.shoppinglist", newFile);
@@ -232,6 +247,7 @@ public class AddEditProductoFragment extends Fragment {
         //Empezamos el activity para que se nos abra la cámara.
         startActivityForResult(capturarImagenIntent,
                 REQUEST_CODE);
+
 
     }
 

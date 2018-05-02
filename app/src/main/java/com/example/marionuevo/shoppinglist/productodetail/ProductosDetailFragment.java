@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.marionuevo.shoppinglist.R;
 import com.example.marionuevo.shoppinglist.addeditproducto.AddEditProductoActivity;
+import com.example.marionuevo.shoppinglist.data.Constants;
 import com.example.marionuevo.shoppinglist.data.Producto;
 import com.example.marionuevo.shoppinglist.data.ProductosDBHelper;
 import com.example.marionuevo.shoppinglist.productos.ProductosActivity;
@@ -96,7 +97,7 @@ public class ProductosDetailFragment extends Fragment {
     private void showProducto(Producto producto) {
         mCollapsingView.setTitle(producto.getName());
         Glide.with(this)
-                .load(Uri.parse("file:///android_asset/" + producto.getPhotoUri()))
+                .load(Uri.parse("file:///"+ Constants.URI_PHOTOS+ producto.getPhotoUri()))
                 .centerCrop()
                 .into(mPhoto);
         mName.setText(producto.getName());
