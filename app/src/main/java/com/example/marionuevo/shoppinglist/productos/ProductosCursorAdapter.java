@@ -40,14 +40,17 @@ public class ProductosCursorAdapter extends CursorAdapter {
     public void bindView(View view, final Context context, Cursor cursor) {
         // Referencias UI.
         TextView nameText =  view.findViewById(R.id.tv_name);
+        TextView descriptionText = view.findViewById(R.id.tv_description);
         final ImageView photoProducto =  view.findViewById(R.id.iv_photo);
 
         // Get valores.
         String name = cursor.getString(cursor.getColumnIndex(ProductosContract.ProductosEntry.NAME));
+        String description = cursor.getString(cursor.getColumnIndex(ProductosContract.ProductosEntry.DESCRIPTION));
         String photoUri = cursor.getString(cursor.getColumnIndex(ProductosContract.ProductosEntry.PHOTO_URI));
 
         // Setup.
         nameText.setText(name);
+        descriptionText.setText(description);
         Glide
                 .with(context)
                 .load(Uri.parse("file:///android_asset/" + photoUri))

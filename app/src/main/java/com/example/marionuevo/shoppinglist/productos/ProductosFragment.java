@@ -87,9 +87,6 @@ public class ProductosFragment extends Fragment {
             }
         });
 
-
-        getActivity().deleteDatabase(ProductosDBHelper.DATABASE_NAME);
-
         // Instancia de helper
         mProductosDBHelper = new ProductosDBHelper(getActivity());
 

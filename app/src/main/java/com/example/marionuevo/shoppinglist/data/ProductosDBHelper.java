@@ -29,17 +29,20 @@ public class ProductosDBHelper extends SQLiteOpenHelper {
         + ProductosContract.ProductosEntry.PHOTO_URI + " TEXT,"
         + "UNIQUE (" + ProductosContract.ProductosEntry.ID + "))"
         );
+        db.close();
 
-        mockData(db);
+        //mockData(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
-
+/*
+Example
+ */
     private void mockData(SQLiteDatabase sqLiteDatabase) {
-        mockProductos(sqLiteDatabase, new Producto("Pasta", "Macarrones añsld",
+        mockProductos(sqLiteDatabase, new Producto("Pasta", "Macarrones Integrales",
                 "macarrones.jpg"));
         mockProductos(sqLiteDatabase, new Producto("Leche", "Entera y desnatada",
                 "leche.jpg"));
@@ -48,12 +51,6 @@ public class ProductosDBHelper extends SQLiteOpenHelper {
         mockProductos(sqLiteDatabase, new Producto("Patatas", "Patatas blancas",
                 "patatas.jpg"));
         mockProductos(sqLiteDatabase, new Producto("Pan", "300 gramos",
-                "pan.jpg"));
-        mockProductos(sqLiteDatabase, new Producto("aa", "300 gramos",
-                "pan.jpg"));
-        mockProductos(sqLiteDatabase, new Producto("Paaan", "300 gramos",
-                "pan.jpg"));
-        mockProductos(sqLiteDatabase, new Producto("aaaaagg", "300 gramos",
                 "pan.jpg"));
 
     }
@@ -79,11 +76,11 @@ public class ProductosDBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public int deleteProductos(String lawyerId) {
+    public int deleteProductos(String productoId) {
         return getWritableDatabase().delete(
                 ProductosContract.ProductosEntry.TABLE_NAME,
                 ProductosContract.ProductosEntry.ID + " LIKE ?",
-                new String[]{lawyerId});
+                new String[]{productoId});
     }
 
     public int updateProductos(Producto producto, String productoId) {
